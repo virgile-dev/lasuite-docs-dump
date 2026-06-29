@@ -89,14 +89,27 @@ class DocsExporter:
         return self.api_get(f"/api/v1.0/documents/{doc_id}/")
 
     def get_formatted_content(self, doc_id: str) -> str:
-        """Fetch document content as markdown via the formatted-content endpoint."""
-        data = self.api_get(
+        """Fetch document content as markdown.
+
+        Tries the v5+ endpoint first, falls back to the legacy /content/ endpoint
+        used by older instances.
+        """
+        params = {"content_format": "markdown"}
+        for path in (
             f"/api/v1.0/documents/{doc_id}/formatted-content/",
-            params={"content_format": "markdown"},
-        )
-        if not data:
-            return ""
-        return data.get("content") or ""
+            f"/api/v1.0/documents/{doc_id}/content/",
+        ):
+            url = f"{self.base_url}{path}"
+            resp = self.session.get(url, params=params)
+            if resp.status_code == 404:
+                continue
+            if resp.status_code == 401:
+                print("  ERROR 401 Unauthorized — provide --token or --cookie", file=sys.stderr)
+                sys.exit(1)
+            resp.raise_for_status()
+            time.sleep(self.delay)
+            return resp.json().get("content") or ""
+        return ""
 
     def get_children(self, doc_id: str) -> list:
         children = []
