@@ -66,7 +66,8 @@ function ExportApp() {
           <span className="export-card__warning-icon">⚠️</span>
           <span>
             This tool only works with <strong>public</strong> documents. Private
-            or restricted docs will return an error.
+            or restricted docs will return an error.{" "}
+            <strong>Do not make a document containing sensitive content public.</strong>
           </span>
         </div>
 
