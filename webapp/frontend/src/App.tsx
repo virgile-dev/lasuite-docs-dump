@@ -62,9 +62,9 @@ function ExportApp() {
     <div className="export-page">
       <main className="export-card">
         <div className="export-card__header">
-          <h1 className="export-card__title">Docs Export</h1>
+          <h1 className="export-card__title">LaSuite Docs dump</h1>
           <p className="export-card__subtitle">
-            Download any public LaSuite Docs document tree as a zip file.
+            Download any public LaSuite Docs document tree.
           </p>
         </div>
 
