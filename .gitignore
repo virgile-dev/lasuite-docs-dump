@@ -1,0 +1,6 @@
+output/
+webapp/frontend/node_modules/
+webapp/frontend/dist/
+__pycache__/
+*.pyc
+.env

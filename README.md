@@ -61,3 +61,37 @@ python3 export_docs.py <url> --cookie "sessionid=abc123"
 ```bash
 pip install requests
 ```
+
+---
+
+## Web app
+
+A simple browser interface — paste a URL, get a `.zip`.
+
+### Run in dev mode
+
+```bash
+# Terminal 1 — Flask backend (port 8000)
+cd webapp
+pip install flask requests
+python3 server.py
+
+# Terminal 2 — Vite frontend (port 5173, proxies /api to Flask)
+cd webapp/frontend
+npm install
+npm run dev
+```
+
+Open http://localhost:5173.
+
+### Build for production
+
+```bash
+cd webapp/frontend
+npm run build          # outputs to webapp/frontend/dist/
+
+cd ..
+python3 server.py      # serves the built frontend + API on port 8000
+```
+
+Open http://localhost:8000.
