@@ -1,11 +1,22 @@
 import { useState } from "react";
 import { CunninghamProvider } from "@gouvfr-lasuite/ui-kit";
-import { Button, Input, Loader } from "@gouvfr-lasuite/cunningham-react";
+import {
+  Button,
+  Input,
+  Loader,
+  Radio,
+  RadioGroup,
+  Switch,
+} from "@gouvfr-lasuite/cunningham-react";
 import "@gouvfr-lasuite/ui-kit/style";
 import "./App.scss";
 
+type Format = "markdown" | "html" | "pdf";
+
 function ExportApp() {
   const [url, setUrl] = useState("");
+  const [format, setFormat] = useState<Format>("markdown");
+  const [includeMedia, setIncludeMedia] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -21,7 +32,7 @@ function ExportApp() {
       const res = await fetch("/api/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: trimmed }),
+        body: JSON.stringify({ url: trimmed, format, include_media: includeMedia }),
       });
 
       if (!res.ok) {
@@ -47,18 +58,13 @@ function ExportApp() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleExport();
-  };
-
   return (
     <div className="export-page">
       <main className="export-card">
         <div className="export-card__header">
           <h1 className="export-card__title">Docs Export</h1>
           <p className="export-card__subtitle">
-            Download any public LaSuite Docs document tree as a zip of markdown
-            files.
+            Download any public LaSuite Docs document tree as a zip file.
           </p>
         </div>
 
@@ -75,22 +81,45 @@ function ExportApp() {
           <Input
             label="Document URL"
             value={url}
-            onChange={(e) => {
-              setUrl(e.target.value);
-              setDone(false);
-              setError(null);
-            }}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => { setUrl(e.target.value); setDone(false); setError(null); }}
+            onKeyDown={(e) => e.key === "Enter" && handleExport()}
             placeholder="https://docs.numerique.gouv.fr/docs/..."
             fullWidth
             disabled={loading}
           />
 
-          <Button
-            onClick={handleExport}
-            disabled={loading || !url.trim()}
-            fullWidth
-          >
+          <RadioGroup label="Format">
+            <Radio
+              label="Markdown"
+              value="markdown"
+              checked={format === "markdown"}
+              onChange={() => setFormat("markdown")}
+              disabled={loading}
+            />
+            <Radio
+              label="HTML"
+              value="html"
+              checked={format === "html"}
+              onChange={() => setFormat("html")}
+              disabled={loading}
+            />
+            <Radio
+              label="PDF"
+              value="pdf"
+              checked={format === "pdf"}
+              onChange={() => setFormat("pdf")}
+              disabled={loading}
+            />
+          </RadioGroup>
+
+          <Switch
+            label="Include media files"
+            checked={includeMedia}
+            onChange={(e) => setIncludeMedia((e.target as HTMLInputElement).checked)}
+            disabled={loading}
+          />
+
+          <Button onClick={handleExport} disabled={loading || !url.trim()} fullWidth>
             {loading ? "Exporting…" : "Export as .zip"}
           </Button>
         </div>

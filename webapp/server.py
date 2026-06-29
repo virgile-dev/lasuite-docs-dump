@@ -32,12 +32,16 @@ def index():
 def export():
     data = request.get_json(silent=True) or {}
     url = (data.get("url") or "").strip()
+    content_format = data.get("format", "markdown")
+    include_media = bool(data.get("include_media", True))
 
     if not url:
         return jsonify({"error": "Missing url parameter."}), 400
+    if content_format not in ("markdown", "html", "pdf"):
+        return jsonify({"error": "Invalid format. Use markdown, html, or pdf."}), 400
 
     try:
-        zip_bytes, zip_name = export_to_zip(url)
+        zip_bytes, zip_name = export_to_zip(url, content_format=content_format, include_media=include_media)
     except ExportError as e:
         return jsonify({"error": str(e)}), 400
     except Exception as e:
