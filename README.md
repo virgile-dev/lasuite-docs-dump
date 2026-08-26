@@ -1,6 +1,6 @@
-# scrap_user-docs
+# LaSuite Docs dump
 
-Export a [LaSuite Docs](https://docs.numerique.gouv.fr) document tree to local markdown files, mirroring the parent/child structure and downloading all media.
+Export a [LaSuite Docs](https://github.com/suitenumerique/docs/) document tree to local markdown files, mirroring the parent/child structure and downloading all media.
 
 ## Usage
 
