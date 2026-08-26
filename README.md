@@ -12,10 +12,10 @@ The URL can be either a full doc URL or a base URL + doc ID:
 
 ```bash
 # Full URL (doc ID extracted automatically)
-python3 export_docs.py https://docs.numerique.gouv.fr/docs/335e43b5-9e16-4798-a0b4-912e44c7135e/
+python3 export_docs.py https://{YOUR-DOMAIN}/docs/{YOUR-DOCUMENT-ID}/
 
 # Base URL + doc ID
-python3 export_docs.py https://docs.numerique.gouv.fr 335e43b5-9e16-4798-a0b4-912e44c7135e
+python3 export_docs.py {YOUR-DOMAIN} {YOUR-DOC-ID}
 ```
 
 Works with any LaSuite Docs instance (v5+ and older versions).
